@@ -1,6 +1,7 @@
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from "@/components/ui/navigation-menu";
 import { motion } from "framer-motion";
 
+
 export default function Landing() {
   return (
     <div className="min-h-screen flex flex-col bg-black">
