@@ -1,91 +1,67 @@
-import { useState } from "react";
+import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from "@/components/ui/navigation-menu";
+import { motion } from "framer-motion";
 
-
-export default function Home() {
-  const [resume, setResume] = useState('');
-const [optimizationSuggestions, setOptimizationSuggestions] = useState([]);
-  const [jobs, setJobs] = useState([]);
-  const [query, setQuery] = useState('');
-
-  async function fetchJobs() {
-    const res = await fetch(`/api/jobs?query=${query}`);
-    const data = await res.json();
-    setJobs(data);
-  }
-
-  async function optimizeResume() {
-    if (!resume) {
-      alert("Please paste your resume first!");
-      return;
-    }
-  
-    const res = await fetch('/api/optimize', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ resume })
-    });
-  
-    const data = await res.json();
-    setOptimizationSuggestions(data.suggestions);
-  }
+export default function Landing() {
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Job Board</h1>
+    <div className="min-h-screen flex flex-col bg-blue">
+      
+      {/* Navbar */}
+      <nav className="w-full bg-navy p-4">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div className="text-white text-2xl font-bold">AlignAI</div>
 
-      {/* Search bar */}
-      <div className="mb-4">
-        <input 
-          type="text" 
-          placeholder="Search for jobs..." 
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="border px-4 py-2 mr-2 rounded"
-        />
-        <button onClick={fetchJobs} className="bg-blue-500 text-white px-4 py-2 rounded">
-          Search Jobs
-        </button>
-      </div>
+          <NavigationMenu>
+            <NavigationMenuList className="flex space-x-6">
+              <NavigationMenuItem>
+                <NavigationMenuLink href="/" className="text-white hover:underline">Home</NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink href="/jobs" className="text-white hover:underline">Jobs</NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink href="/resume" className="text-white hover:underline">Resume Optimizer</NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink href="/resume" className="text-white hover:underline">About Us</NavigationMenuLink>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
+      </nav>
 
-      <div className="mb-6">
-  <h2 className="text-xl font-semibold mb-2">Paste Your Resume</h2>
-  <textarea 
-    className="w-full border rounded p-2 h-40"
-    placeholder="Paste your resume here..."
-    value={resume}
-    onChange={(e) => setResume(e.target.value)}
-  ></textarea>
-  <button 
-    onClick={optimizeResume}
-    className="bg-green-500 text-white px-4 py-2 mt-2 rounded"
-  >
-    Optimize Resume
-  </button>
-</div>
+      {/* Hero Section */}
+      <section className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-black to-blue-950 p-8 text-center">
+      <motion.h1 
+        className="text-5xl font-bold mb-4"
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        Welcome to AlignAI
+      </motion.h1>
 
-{optimizationSuggestions && (
-  <div className="mt-6 p-4 border rounded bg-gray-50">
-    <h2 className="text-xl font-semibold mb-2">Optimization Suggestions:</h2>
-    <p className="whitespace-pre-line text-black">{optimizationSuggestions}</p>
-  </div>
-)}
+      <motion.p 
+        className="text-lg text-gray-600 mb-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.3 }}
+      >
+        Connecting students with real-world opportunities, powered by AI.
+      </motion.p>
 
-
-      {/* Job Listings */}
-      <div className="mt-4">
-        {jobs.map((job) => (
-          <div key={job.id} className="border p-4 mb-4 rounded">
-            <h2 className="text-xl font-bold">{job.title}</h2>
-            <p className="text-gray-600">{job.company.display_name}</p>
-            <p className="text-gray-500">{job.location.display_name}</p>
-            <p className="text-sm mt-2">{job.description?.substring(0, 150)}...</p>
-            <a href={job.redirect_url} target="_blank" rel="noreferrer" className="text-blue-500 underline mt-2 block">
-              View Job
-            </a>
-          </div>
-        ))}
-      </div>
+      <motion.a 
+        href="/jobs"
+        className="bg-blue-600 text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-blue-700"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 0.6 }}
+      >
+        Get Started
+      </motion.a>
+    </section>
+      <img src=""></img>
     </div>
   );
 }
