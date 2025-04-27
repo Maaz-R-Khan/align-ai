@@ -1,0 +1,50 @@
+<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+  <!-- Definitions for gradients and effects -->
+  <defs>
+    <!-- Main gradient for logo elements -->
+    <linearGradient id="techGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#111827" />
+      <stop offset="100%" stop-color="#1e3a8a" />
+    </linearGradient>
+    
+    <!-- Accent gradient for highlights -->
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#1e40af" />
+    </linearGradient>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Logo background - transparent -->
+  <rect width="50" height="50" fill="transparent" />
+  
+  <!-- Main logo mark -->
+  <g transform="translate(5, 5)">
+    <!-- Stylized "A" -->
+    <path d="M20 5 L30 35 L25 35 L23 30 L17 30 L15 35 L10 35 L20 5 Z" 
+          fill="#111827" stroke="#3b82f6" stroke-width="1.5" />
+    
+    <!-- Inner part of the A -->
+    <path d="M20 18 L17.5 25 L22.5 25 L20 18 Z" fill="#0f172a" />
+    
+    <!-- Hexagonal AI element with glow -->
+    <g transform="translate(20, 20)">
+      <polygon points="0,-12 10,-6 10,6 0,12 -10,6 -10,-6" 
+               fill="#0f172a" stroke="url(#accentGradient)" stroke-width="1.5" filter="url(#glow)" />
+      
+      <!-- AI text in hexagon -->
+      <text x="0" y="3" font-family="'Rajdhani', 'Orbitron', sans-serif" font-size="10" 
+            font-weight="bold" fill="#3b82f6" text-anchor="middle">AI</text>
+    </g>
+    
+    <!-- Digital circuit connection lines -->
+    <line x1="30" y1="15" x2="35" y2="15" stroke="#3b82f6" stroke-width="1" />
+    <line x1="30" y1="20" x2="35" y2="20" stroke="#3b82f6" stroke-width="1" />
+    <line x1="30" y1="25" x2="35" y2="25" stroke="#3b82f6" stroke-width="1" />
+  </g>
+</svg>
