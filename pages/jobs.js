@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from "@/components/ui/navigation-menu";
-import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import Footer from '@/components/ui/footer';
@@ -8,19 +7,22 @@ import Navbar from '@/components/ui/navbar';
 
 export default function Jobs() {
   const [resume, setResume] = useState('');
+  const [resumeFile, setResumeFile] = useState(null);
   const [optimizationSuggestions, setOptimizationSuggestions] = useState('');
   const [jobs, setJobs] = useState([]);
   const [query, setQuery] = useState('');
   const [matches, setMatches] = useState([]);
-  const [location, setLocation] = useState('Long Island');
+  const [location, setLocation] = useState('New York');
   const [isLoading, setIsLoading] = useState({
     jobs: false,
     optimize: false,
     match: false,
+    upload: false
   });
-  const [activeTab, setActiveTab] = useState('search'); // Add state for active tab
+  const [activeTab, setActiveTab] = useState('search');
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 10;
+  const fileInputRef = useRef(null);
 
   async function fetchJobs() {
     setIsLoading(prev => ({ ...prev, jobs: true }));
@@ -37,9 +39,54 @@ export default function Jobs() {
     }
   }
 
+  async function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const allowedTypes = [
+      'application/pdf', 
+      'application/msword', 
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ];
+    
+    if (!allowedTypes.includes(file.type)) {
+      alert("Please upload a PDF or Word document (.doc, .docx)");
+      return;
+    }
+    
+    setResumeFile(file);
+    
+    // Show file is being processed
+    setIsLoading(prev => ({ ...prev, upload: true }));
+    
+    // Create FormData
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    try {
+      // Upload and parse the file
+      const res = await fetch('/api/parseResume', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!res.ok) {
+        throw new Error('Failed to parse resume');
+      }
+      
+      const data = await res.json();
+      setResume(data.text);
+    } catch (error) {
+      console.error("Error parsing resume file:", error);
+      alert("Failed to parse resume file. Please try pasting the text instead.");
+    } finally {
+      setIsLoading(prev => ({ ...prev, upload: false }));
+    }
+  }
+
   async function optimizeResume() {
     if (!resume) {
-      alert("Please paste your resume first!");
+      alert("Please paste your resume or upload a file first!");
       return;
     }
 
@@ -112,20 +159,23 @@ export default function Jobs() {
     }
   };
 
-const router = useRouter();
-const { tab } = router.query;
+  const router = useRouter();
+  const { tab } = router.query;
 
-// When tab changes in URL, update activeTab
-useEffect(() => {
-  if (tab === "resume") {
-    setActiveTab("resume");
-  } else if (tab === "matches") {
-    setActiveTab("matches");
-  } else {
-    setActiveTab("search"); // Default
-  }
-}, [tab]);
+  // When tab changes in URL, update activeTab
+  useEffect(() => {
+    if (tab === "resume") {
+      setActiveTab("resume");
+    } else if (tab === "matches") {
+      setActiveTab("matches");
+    } else {
+      setActiveTab("search"); // Default
+    }
+  }, [tab]);
 
+  const handleBrowseClick = () => {
+    fileInputRef.current.click();
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-900">
@@ -348,11 +398,51 @@ useEffect(() => {
             <div id="resume-optimizer">
               <h2 id="resumeOptimizer" className="text-2xl font-bold mb-6 text-white">Resume Optimizer</h2>
               <div className="bg-gray-900 p-6 rounded">
-                <p className="mb-4 text-gray-300">Paste your resume below to get AI-powered optimization suggestions</p>
+                <p className="mb-4 text-gray-300">Paste your resume below or upload a file to get AI-powered optimization suggestions</p>
+                
+                {/* File Upload Component */}
+                <div className="mb-6">
+                  <div className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-700 rounded-lg cursor-pointer bg-gray-800 hover:bg-gray-750 transition-colors">
+                    <input 
+                      ref={fileInputRef}
+                      type="file" 
+                      accept=".pdf,.doc,.docx" 
+                      className="hidden" 
+                      onChange={handleFileUpload}
+                    />
+                    
+                    {resumeFile ? (
+                      <div className="text-center">
+                        <p className="text-gray-300">{resumeFile.name}</p>
+                        <p className="text-sm text-gray-400">{Math.round(resumeFile.size / 1024)} KB</p>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center text-center">
+                        <p className="text-gray-300 mb-2">
+                          {isLoading.upload ? "Processing file..." : "Drag & drop your resume file or"}
+                        </p>
+                        <button 
+                          onClick={handleBrowseClick}
+                          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                          disabled={isLoading.upload}
+                        >
+                          Browse Files
+                        </button>
+                        <p className="text-sm text-gray-400 mt-2">PDF, DOC, or DOCX (Max 5MB)</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="flex items-center mb-4">
+                  <div className="flex-grow h-px bg-gray-700"></div>
+                  <p className="px-4 text-gray-400">OR</p>
+                  <div className="flex-grow h-px bg-gray-700"></div>
+                </div>
                 
                 <textarea 
                   className="w-full bg-gray-800 text-white border border-gray-700 rounded p-4 h-64 mb-4"
-                  placeholder="Paste your resume here..."
+                  placeholder="Paste your resume text here..."
                   value={resume}
                   onChange={(e) => setResume(e.target.value)}
                 ></textarea>
