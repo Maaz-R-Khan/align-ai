@@ -1,4 +1,10 @@
 import { useState } from 'react';
+import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from "@/components/ui/navigation-menu";
+import { motion } from "framer-motion";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import Footer from '@/components/ui/footer';
+import Navbar from '@/components/ui/navbar';
 
 export default function Jobs() {
   const [resume, setResume] = useState('');
@@ -12,6 +18,9 @@ export default function Jobs() {
     optimize: false,
     match: false,
   });
+  const [activeTab, setActiveTab] = useState('search'); // Add state for active tab
+  const [currentPage, setCurrentPage] = useState(1);
+  const jobsPerPage = 10;
 
   async function fetchJobs() {
     setIsLoading(prev => ({ ...prev, jobs: true }));
@@ -19,6 +28,7 @@ export default function Jobs() {
       const res = await fetch(`/api/jobs?query=${query}&location=${encodeURIComponent(location)}`);
       const data = await res.json();
       setJobs(data);
+      setCurrentPage(1); // Reset to first page when new search is performed
     } catch (error) {
       console.error("Error fetching jobs:", error);
       alert("Failed to fetch jobs. Please try again.");
@@ -76,6 +86,7 @@ export default function Jobs() {
       const data = await res.json();
       console.log("Matches received:", data.matches);
       setMatches(data.matches || []);
+      setActiveTab('matches'); // Switch to matches tab after matching
     } catch (error) {
       console.error("Error matching jobs:", error);
       alert("Failed to match jobs. Please try again.");
@@ -89,149 +100,349 @@ export default function Jobs() {
     return jobs[parseInt(numericId)] || null;
   };
 
+  // Pagination logic
+  const indexOfLastJob = currentPage * jobsPerPage;
+  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+  const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
+  const totalPages = Math.ceil(jobs.length / jobsPerPage);
+
+  const paginate = (pageNumber) => {
+    if (pageNumber > 0 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+const router = useRouter();
+const { tab } = router.query;
+
+// When tab changes in URL, update activeTab
+useEffect(() => {
+  if (tab === "resume") {
+    setActiveTab("resume");
+  } else if (tab === "matches") {
+    setActiveTab("matches");
+  } else {
+    setActiveTab("search"); // Default
+  }
+}, [tab]);
+
+
   return (
-    <div className="p-4 max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Job Match Assistant</h1>
+    <div className="min-h-screen flex flex-col bg-gray-900">
+      
+      {/* Navbar */}
+      <Navbar />
 
-      {/* 1. Search for Jobs */}
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">1. Search for Jobs</h2>
-        <div className="flex flex-col md:flex-row gap-2">
-          <input 
-            type="text" 
-            placeholder="Job title or keywords..." 
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="border px-4 py-2 rounded flex-grow"
-          />
-          <input 
-            type="text" 
-            placeholder="Location" 
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="border px-4 py-2 rounded md:w-1/3"
-          />
+      {/* Main Content */}
+      <div className="relative z-10 flex-grow max-w-7xl mx-auto py-8 px-4">
+        
+        {/* Tabs */}
+        <div className="flex border-b border-gray-700 mb-8">
           <button 
-            onClick={fetchJobs}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-            disabled={isLoading.jobs}
+            className={`px-4 py-2 font-medium ${activeTab === 'search' ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-400'}`}
+            onClick={() => setActiveTab('search')}
           >
-            {isLoading.jobs ? "Searching..." : "Search Jobs"}
+            Job Listings
+          </button>
+          <button 
+            className={`px-4 py-2 font-medium ${activeTab === 'resume' ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-400'}`}
+            onClick={() => setActiveTab('resume')}
+          >
+            Resume Optimizer
+          </button>
+          <button 
+            className={`px-4 py-2 font-medium ${activeTab === 'matches' ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-400'}`}
+            onClick={() => setActiveTab('matches')}
+            disabled={matches.length === 0}
+          >
+            Job Matches
           </button>
         </div>
-      </div>
 
-      {/* 2. Paste Resume */}
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">2. Paste Your Resume</h2>
-        <textarea 
-          className="w-full border rounded p-2 h-40"
-          placeholder="Paste your resume here..."
-          value={resume}
-          onChange={(e) => setResume(e.target.value)}
-        ></textarea>
-        <div className="flex gap-2 mt-2">
-          <button 
-            onClick={optimizeResume}
-            className="bg-green-500 text-white px-4 py-2 rounded"
-            disabled={isLoading.optimize}
-          >
-            {isLoading.optimize ? "Optimizing..." : "Optimize Resume"}
-          </button>
-          <button 
-            onClick={matchJobs}
-            className="bg-purple-500 text-white px-4 py-2 rounded"
-            disabled={isLoading.match || jobs.length === 0 || !resume}
-          >
-            {isLoading.match ? "Matching..." : "Match Jobs"}
-          </button>
-        </div>
-      </div>
+        {/* Tab Content */}
+        <div className="mb-8">
+          {/* Job Listings Tab */}
+          {activeTab === 'search' && (
+            <div>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-white">Available Jobs ({jobs.length})</h2>
+                {jobs.length > 0 && resume && (
+                  <button 
+                    onClick={matchJobs}
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    disabled={isLoading.match}
+                  >
+                    {isLoading.match ? "Matching..." : "Match with Resume"}
+                  </button>
+                )}
+              </div>
 
-      {/* Results */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Matches */}
-        {matches.length > 0 && (
-          <div className="p-4 border rounded bg-gray-50">
-            <h2 className="text-xl font-semibold mb-4">Your Job Matches</h2>
-            {matches.map((match, index) => {
-              const job = getJobById(match.job_id);
-              if (!job) return null;
-              
-              return (
-                <div key={index} className="mb-6 p-4 border rounded bg-white">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="font-bold text-lg">{job.title}</h3>
-                      <p className="text-gray-600">{job.company?.display_name}</p>
-                      <p className="text-gray-500 text-sm">{job.location?.display_name}</p>
-                    </div>
-                    <div className="ml-4">
-                      <div className={`text-white font-bold text-lg rounded-full w-16 h-16 flex items-center justify-center
-                        ${match.match >= 80 ? 'bg-green-500' : 
-                          match.match >= 60 ? 'bg-yellow-500' : 'bg-red-500'}`}>
-                        {match.match}%
+              {/* Search form in tab */}
+              <div className="bg-gray-900 p-6 rounded mb-6">
+                <div className="flex flex-col md:flex-row gap-2">
+                  <input 
+                    type="text" 
+                    placeholder="Job title or keywords..." 
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    className="bg-gray-800 text-white border border-gray-700 px-4 py-2 rounded flex-grow"
+                  />
+                  <input 
+                    type="text" 
+                    placeholder="Location" 
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    className="bg-gray-800 text-white border border-gray-700 px-4 py-2 rounded md:w-1/3"
+                  />
+                  <button 
+                    onClick={fetchJobs}
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    disabled={isLoading.jobs}
+                  >
+                    {isLoading.jobs ? "Searching..." : "Search Jobs"}
+                  </button>
+                </div>
+              </div>
+
+              {/* Filter sidebar and job listings */}
+              <div className="flex flex-col md:flex-row gap-6">
+                {/* Filters */}
+                <div className="w-full md:w-64 bg-gray-900 p-4 rounded">
+                  <h3 className="font-bold text-lg mb-4 text-white">Filters</h3>
+                  
+                  <div className="mb-4">
+                    <h4 className="font-medium mb-2 text-gray-300">Job Type</h4>
+                    <div className="space-y-2 text-gray-400">
+                      <div className="flex items-center">
+                        <input type="checkbox" id="full-time" className="mr-2" />
+                        <label htmlFor="full-time">Full-time</label>
+                      </div>
+                      <div className="flex items-center">
+                        <input type="checkbox" id="part-time" className="mr-2" />
+                        <label htmlFor="part-time">Part-time</label>
+                      </div>
+                      <div className="flex items-center">
+                        <input type="checkbox" id="contract" className="mr-2" />
+                        <label htmlFor="contract">Contract</label>
                       </div>
                     </div>
                   </div>
-                  <div className="mt-3 text-sm">
-                    <p className="font-medium text-green-600">Strengths:</p>
-                    <p>{match.strengths || "None specified"}</p>
-                    <p className="font-medium text-red-600 mt-2">Areas to improve:</p>
-                    <p>{match.weaknesses || "None specified"}</p>
+
+                  <div className="mb-4">
+                    <h4 className="font-medium mb-2 text-gray-300">Work Arrangement</h4>
+                    <div className="space-y-2 text-gray-400">
+                      <div className="flex items-center">
+                        <input type="checkbox" id="On-site" className="mr-2" />
+                        <label htmlFor="On-site">On-site</label>
+                      </div>
+                      <div className="flex items-center">
+                        <input type="checkbox" id="Hybrid" className="mr-2" />
+                        <label htmlFor="Hybrid">Hybrid</label>
+                      </div>
+                      <div className="flex items-center">
+                        <input type="checkbox" id="Remote" className="mr-2" />
+                        <label htmlFor="Remote">Remote</label>
+                      </div>
+                    </div>
                   </div>
-                  <a 
-                    href={job.redirect_url} 
-                    target="_blank" 
-                    rel="noreferrer" 
-                    className="text-blue-500 underline mt-3 inline-block"
-                  >
-                    View Job
-                  </a>
+                  
+                  <div className="mb-4">
+                    <h4 className="font-medium mb-2 text-gray-300">Experience Level</h4>
+                    <div className="space-y-2 text-gray-400">
+                      <div className="flex items-center">
+                        <input type="checkbox" id="entry-level" className="mr-2" />
+                        <label htmlFor="entry-level">Entry Level</label>
+                      </div>
+                      <div className="flex items-center">
+                        <input type="checkbox" id="mid-level" className="mr-2" />
+                        <label htmlFor="mid-level">Mid-Level</label>
+                      </div>
+                      <div className="flex items-center">
+                        <input type="checkbox" id="senior-level" className="mr-2" />
+                        <label htmlFor="senior-level">Senior Level</label>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Resume Optimization */}
-        {optimizationSuggestions && (
-          <div className="p-4 border rounded bg-gray-50">
-            <h2 className="text-xl font-semibold mb-2">Resume Optimization Tips:</h2>
-            <div className="whitespace-pre-line bg-white p-4 rounded border">
-              {optimizationSuggestions}
+                
+                {/* Job Listings */}
+                <div className="flex-1">
+                  {jobs.length === 0 ? (
+                    <div className="bg-gray-900 p-8 rounded text-center">
+                      <p className="text-gray-400">Search for jobs to see listings</p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="grid grid-cols-1 gap-4">
+                        {currentJobs.map((job) => (
+                          <div key={job.id} className="bg-gray-900 p-6 rounded hover:bg-gray-800 transition">
+                            <div className="flex justify-between">
+                              <div>
+                                <h3 className="text-xl font-bold text-blue-400">{job.title}</h3>
+                                <p className="text-gray-300">{job.company?.display_name}</p>
+                                <p className="text-gray-400 text-sm">{job.location?.display_name}</p>
+                              </div>
+                              {matches.some(m => m.job_id?.replace('job-', '') == jobs.indexOf(job)) && (
+                                <div className="bg-green-900 text-green-300 px-3 py-1 rounded-full text-sm font-medium">
+                                  Matched!
+                                </div>
+                              )}
+                            </div>
+                            <p className="text-sm mt-4 line-clamp-3 text-gray-300">{job.description}</p>
+                            <div className="mt-4 flex justify-between items-center">
+                              <a 
+                                href={job.redirect_url} 
+                                target="_blank" 
+                                rel="noreferrer" 
+                                className="text-blue-400 hover:underline font-medium"
+                              >
+                                View Details
+                              </a>
+                              <span className="text-gray-400 text-sm">Posted: {job.created || 'Recently'}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      
+                      {/* Pagination */}
+                      {totalPages > 1 && (
+                        <div className="flex justify-center mt-6">
+                          <nav className="flex items-center space-x-2">
+                            <button 
+                              onClick={() => paginate(currentPage - 1)}
+                              disabled={currentPage === 1}
+                              className={`px-3 py-1 rounded ${currentPage === 1 ? 'bg-gray-800 text-gray-500' : 'bg-gray-700 text-white hover:bg-gray-600'}`}
+                            >
+                              Prev
+                            </button>
+                            
+                            {[...Array(totalPages)].map((_, index) => (
+                              <button
+                                key={index}
+                                onClick={() => paginate(index + 1)}
+                                className={`px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white hover:bg-gray-600'}`}
+                              >
+                                {index + 1}
+                              </button>
+                            ))}
+                            
+                            <button 
+                              onClick={() => paginate(currentPage + 1)}
+                              disabled={currentPage === totalPages}
+                              className={`px-3 py-1 rounded ${currentPage === totalPages ? 'bg-gray-800 text-gray-500' : 'bg-gray-700 text-white hover:bg-gray-600'}`}
+                            >
+                              Next
+                            </button>
+                          </nav>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
 
-      {/* Job Listings */}
-      <div className="mt-6">
-        <h2 className="text-xl font-semibold mb-4">Available Jobs ({jobs.length})</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {jobs.map((job) => (
-            <div key={job.id} className="border p-4 rounded hover:shadow-md transition">
-              <h3 className="text-lg font-bold">{job.title}</h3>
-              <p className="text-gray-600">{job.company?.display_name}</p>
-              <p className="text-gray-500 text-sm">{job.location?.display_name}</p>
-              <p className="text-sm mt-2 line-clamp-3">{job.description}</p>
-              <div className="flex justify-between mt-3">
-                <a 
-                  href={job.redirect_url} 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className="text-blue-500 underline"
+          {/* Resume Optimizer Tab */}
+          {activeTab === 'resume' && (
+            <div id="resume-optimizer">
+              <h2 id="resumeOptimizer" className="text-2xl font-bold mb-6 text-white">Resume Optimizer</h2>
+              <div className="bg-gray-900 p-6 rounded">
+                <p className="mb-4 text-gray-300">Paste your resume below to get AI-powered optimization suggestions</p>
+                
+                <textarea 
+                  className="w-full bg-gray-800 text-white border border-gray-700 rounded p-4 h-64 mb-4"
+                  placeholder="Paste your resume here..."
+                  value={resume}
+                  onChange={(e) => setResume(e.target.value)}
+                ></textarea>
+                
+                <button 
+                  onClick={optimizeResume}
+                  className="bg-blue-600 text-white px-6 py-3 rounded font-medium hover:bg-blue-700"
+                  disabled={isLoading.optimize || !resume}
                 >
-                  View Details
-                </a>
-                {matches.some(m => m.job_id?.replace('job-', '') == jobs.indexOf(job)) && (
-                  <span className="text-green-500 text-sm">Matched!</span>
+                  {isLoading.optimize ? "Analyzing..." : "Optimize Resume"}
+                </button>
+                
+                {optimizationSuggestions && (
+                  <div className="mt-8">
+                    <h3 className="text-xl font-semibold mb-4 text-white">Optimization Tips:</h3>
+                    <div className="bg-gray-800 border border-gray-700 p-6 rounded">
+                      <div className="whitespace-pre-line text-gray-300">
+                        {optimizationSuggestions}
+                      </div>
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
-          ))}
+          )}
+
+          {/* Job Matches Tab */}
+          {activeTab === 'matches' && (
+            <div>
+              <h2 className="text-2xl font-bold mb-6 text-white">Your Job Matches</h2>
+              
+              {matches.length === 0 ? (
+                <div className="bg-gray-900 p-8 rounded text-center">
+                  <p className="text-gray-400">No job matches yet. Search for jobs and use the "Match with Resume" button to see your matches.</p>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {matches.map((match, index) => {
+                    const job = getJobById(match.job_id);
+                    if (!job) return null;
+                    
+                    return (
+                      <div key={index} className="bg-gray-900 p-6 rounded">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="text-xl font-bold text-blue-400">{job.title}</h3>
+                            <p className="text-gray-300">{job.company?.display_name}</p>
+                            <p className="text-gray-400 text-sm">{job.location?.display_name}</p>
+                          </div>
+                          <div className="ml-4">
+                            <div className={`text-white font-bold text-xl rounded-full w-20 h-20 flex items-center justify-center
+                              ${match.match >= 80 ? 'bg-green-600' : 
+                                match.match >= 60 ? 'bg-yellow-600' : 'bg-red-600'}`}>
+                              {match.match}%
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div>
+                            <h4 className="font-medium text-green-400 mb-2">Strengths:</h4>
+                            <p className="bg-gray-800 border border-green-900 p-4 rounded text-gray-300">{match.strengths || "None specified"}</p>
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-red-400 mb-2">Areas to improve:</h4>
+                            <p className="bg-gray-800 border border-red-900 p-4 rounded text-gray-300">{match.weaknesses || "None specified"}</p>
+                          </div>
+                        </div>
+                        
+                        <div className="mt-4 flex justify-between items-center">
+                          <a 
+                            href={job.redirect_url} 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                          >
+                            Apply Now
+                          </a>
+                          <span className="text-gray-400 text-sm">Posted: {job.created || 'Recently'}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
