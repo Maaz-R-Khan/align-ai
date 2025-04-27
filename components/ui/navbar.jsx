@@ -24,22 +24,22 @@ export default function Navbar() {
         <NavigationMenu>
           <NavigationMenuList className="flex space-x-6">
             <NavigationMenuItem>
-              <NavigationMenuLink href="/" className="text-white hover:no-underline">
+              <NavigationMenuLink href="/" className="text-white font-bold hover:no-underline">
                 Home
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink href="/jobs" className="text-white hover:no-underline">
+              <NavigationMenuLink href="/jobs" className="text-white font-bold hover:no-underline">
                 Jobs
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink href="/jobs?tab=resume" className="text-white hover:no-underline">
+              <NavigationMenuLink href="/jobs?tab=resume" className="text-white font-bold hover:no-underline">
                 Resume Optimizer
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink href="/aboutus" className="text-white hover:no-underline">
+              <NavigationMenuLink href="/aboutus" className="text-white font-bold hover:no-underline">
                 About Us
               </NavigationMenuLink>
             </NavigationMenuItem>

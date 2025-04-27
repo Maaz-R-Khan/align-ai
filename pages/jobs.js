@@ -29,6 +29,9 @@ export default function Jobs() {
     try {
       const res = await fetch(`/api/jobs?query=${query}&location=${encodeURIComponent(location)}`);
       const data = await res.json();
+
+      console.log("Fetched jobs data:", data);
+
       setJobs(data);
       setCurrentPage(1); // Reset to first page when new search is performed
     } catch (error) {
