@@ -116,7 +116,7 @@ export default function Landing() {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
       viewport={{ once: true }}
-      className="group bg-blue-900 p-8 rounded-xl w-[300px] text-white flex flex-col items-center hover:bg-sky-950 shadow-lg transition-all duration-300"
+      className="group bg-blue-700 p-8 rounded-xl w-[300px] text-white flex flex-col items-center hover:bg-sky-950 shadow-lg transition-all duration-300"
     >
       <RocketIcon className="w-12 h-12 mb-6 text-blue-400 group-hover:text-blue-300 transition-all duration-150" />
       <h3 className="text-2xl font-bold mb-2">Build Your Resume</h3>
@@ -133,7 +133,7 @@ export default function Landing() {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.2 }}
       viewport={{ once: true }}
-      className="group bg-blue-800 p-8 rounded-xl w-[300px] text-white flex flex-col items-center hover:bg-sky-950 shadow-lg transition-all duration-300"
+      className="group bg-blue-700 p-8 rounded-xl w-[300px] text-white flex flex-col items-center hover:bg-sky-950 shadow-lg transition-all duration-300"
     >
       <SearchIcon className="w-12 h-12 mb-6 text-blue-400 group-hover:text-blue-300 transition-all duration-150" />
       <h3 className="text-2xl font-bold mb-2">Find Opportunities</h3>
