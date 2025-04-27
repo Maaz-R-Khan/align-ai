@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Image } from "@heroui/image";
 import { AlignCenter } from "lucide-react";
 import Footer from '@/components/ui/Footer';
+import Navbar from "@/components/ui/navbar";
 
 
 export default function About_us() {
@@ -27,22 +28,7 @@ export default function About_us() {
     <div className="text-white text-2xl font-bold">AlignAI</div>
   </div>
 
-          <NavigationMenu>
-            <NavigationMenuList className="flex space-x-6">
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/" className="text-white hover:underline">Home</NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/jobs" className="text-white hover:underline">Jobs</NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/resume" className="text-white hover:underline">Resume Optimizer</NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/about" className="text-white hover:underline">About Us</NavigationMenuLink>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
+          <Navbar />
         </div>
       </nav>
 

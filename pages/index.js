@@ -14,8 +14,8 @@ export default function Landing() {
     <div className="min-h-screen flex flex-col bg-black">
       
       <Head>
-  <title>AlignAI</title>
-  <link rel="icon" href="/favicon.ico" />
+      <title>AlignAI</title>
+      <link rel="icon" type="image/svg+xml" href="/align-ai-navbar-logo.svg" />
 </Head>
 
 
