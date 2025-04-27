@@ -503,7 +503,7 @@ export default function Jobs() {
               
               {matches.length === 0 ? (
                 <div className="bg-gray-900 p-8 rounded text-center">
-                  <p className="text-gray-400">No job matches yet. Search for jobs and use the "Match with Resume" button to see your matches.</p>
+                  <p className="text-gray-400">No job matches yet. Search for jobs and use the &quot;Match with Resume&quot; button to see your matches.</p>
                 </div>
               ) : (
                 <div className="space-y-6">

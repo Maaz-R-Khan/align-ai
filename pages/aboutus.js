@@ -70,7 +70,7 @@ We're here to make the job search less stressful — and more successful.
 
             <h1 className="text-5xl font-bold mb-6">Meet the Minds Behind AlignAI</h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              We’re a team of creators, thinkers, and problem-solvers committed to using AI to simplify and elevate your job search journey.
+            We&apos;re a team of creators, thinkers, and problem-solvers committed to using AI to simplify and elevate your job search journey.
               </p>
 
               </motion.section>

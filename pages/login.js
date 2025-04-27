@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import Footer from "@/components/ui/footer";
+import Link from "next/link"; // ✅ Import Link
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -52,12 +53,11 @@ export default function Login() {
             Login
           </button>
 
-          {/* 👇 Add this section */}
           <p className="text-gray-400 mt-4 text-center">
-            Don't have an account?{" "}
-            <a href="/signup" className="text-blue-500 hover:underline">
+            Don&apos;t have an account?{" "}
+            <Link href="/signup" className="text-blue-500 hover:underline">
               Sign Up
-            </a>
+            </Link>
           </p>
         </form>
       </div>
