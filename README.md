@@ -1,3 +1,53 @@
+# 🚀 AlignAI
+
+**AlignAI** is an AI-powered career assistant designed to optimize your job search experience. Seamlessly tailor your resume, discover job opportunities, and get matched to roles that fit — all in one platform.
+
+🌐 **Live Demo**: [align-ai-beta.vercel.app](https://align-ai-beta.vercel.app/)
+
+---
+
+## 📄 Features
+
+- 🎯 **Resume Optimizer**  
+  Upload your resume and receive AI-driven suggestions to improve job targeting and visibility.
+
+- 🔎 **Smart Job Search**  
+  Integrated with the Adzuna API to provide real-time job listings based on your preferences.
+
+- 🤖 **AI Matching System**  
+  Automatically match your optimized resume to relevant job postings.
+
+- 🔐 **User Authentication**  
+  Secure login and registration powered by Firebase Authentication.
+
+- 💡 **Modern UI/UX**  
+  Responsive and sleek interface built with Next.js, Tailwind CSS, and Framer Motion animations.
+
+- 📬 **Contact Us Form**  
+  Reach out to the AlignAI team directly via our integrated contact form.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: Next.js, React, Tailwind CSS, Framer Motion
+- **Backend/API**: Next.js API Routes, Adzuna API
+- **Authentication**: Firebase Auth
+- **Email Integration**: Formspree (or alternative)
+- **Deployment**: Vercel
+- **Version Control**: Git & GitHub
+
+---
+
+## 🚧 Getting Started (Run Locally)
+
+Follow these steps to set up AlignAI on your local machine:
+
+### 1. **Clone the Repository**
+```bash
+git clone https://github.com/your-username/align-ai.git
+cd align-ai
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
 
 ## Getting Started
