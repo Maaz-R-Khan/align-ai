@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,  // ✅ safer to use environment variable
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 export default async function handler(req, res) {
@@ -19,6 +19,8 @@ You are a professional resume coach. Analyze the following resume text and sugge
 3. Formatting and structure improvements
 4. Quantifiable achievements: Suggest how to add metrics where possible
 5. Keywords optimization for ATS (Applicant Tracking Systems)
+
+Format your response using Markdown with headers, bullet points, and emphasis where appropriate to create a well-structured document.
 
 Resume:
 ${resume}
