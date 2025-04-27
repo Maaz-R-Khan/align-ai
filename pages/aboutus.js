@@ -4,7 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Image } from "@heroui/image";
 import { AlignCenter } from "lucide-react";
-import Footer from '@/components/ui/Footer';
+import Footer from '@/components/ui/footer';
 import Navbar from "@/components/ui/navbar";
 
 export default function About_us() {
