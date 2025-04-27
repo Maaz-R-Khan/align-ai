@@ -46,7 +46,7 @@ export default function About_us() {
                 AlignAI was born from our own struggles navigating the job market.
 We know how overwhelming it can feel — applying, getting rejected, not knowing how to improve.
 So we decided to create the solution we wished we had: an AI-powered job matcher and resume optimizer built to empower students to present their best selves, discover the right opportunities, and connect with employers who value their potential.
-We're here to make the job search less stressful — and more successful.
+We&apos;re here to make the job search less stressful — and more successful.
                 </p>
               </div>
       </motion.section>
