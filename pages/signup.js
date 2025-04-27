@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { auth } from "@/lib/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import Footer from "@/components/ui/footer";
+import Link from "next/link"; // ✅ ADD THIS
 
 export default function Signup() {
   const [form, setForm] = useState({
@@ -76,9 +77,9 @@ export default function Signup() {
 
           <p className="text-gray-400 mt-4 text-center">
             Already have an account?{" "}
-            <a href="/login" className="text-blue-500 hover:underline">
+            <Link href="/login" className="text-blue-500 hover:underline">
               Log in
-            </a>
+            </Link>
           </p>
         </form>
       </div>
