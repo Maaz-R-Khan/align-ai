@@ -13,21 +13,10 @@ export default function About_us() {
       
       {/* Navbar */}
       <nav className="w-full bg-black p-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/align-ai-navbar-logo.svg"
-              alt="AlignAI Logo"
-              width={60}
-              height={60}
-              className="rounded-full"
-            />
-            <div className="text-white text-2xl font-bold">AlignAI</div>
-          </div>
-
-          <Navbar />
-        </div>
-      </nav>
+  <div className="max-w-7xl mx-auto flex justify-between items-center">
+    <Navbar />
+  </div>
+</nav>
 
       {/* Hero Section */}
       <motion.section
