@@ -5,6 +5,8 @@ import { Image } from "@heroui/image";  // ✅ ADD THIS
 import { Link } from "@heroui/link";    // ✅ ADD THIS
 import { Divider } from "@heroui/divider";
 import Head from "next/head";
+import Navbar from "@/components/ui/navbar";
+import Footer from "@/components/ui/footer";
 
 export default function Landing() {
   return (
@@ -17,39 +19,7 @@ export default function Landing() {
 
 
       {/* Navbar */}
-      <nav className="w-full bg-black p-4 ">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          
-    <Image
-      src="/align-ai-navbar-logo.svg"
-      alt="AlignAI Logo"
-      width={60}
-      height={60}
-      className="rounded-full"
-    />
-    <div className="text-white text-2xl font-bold">AlignAI</div>
-  </div>
-
-
-          <NavigationMenu>
-            <NavigationMenuList className="flex space-x-6">
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/" className="text-white hover:no-underline">Home</NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/jobs" className="text-white hover:no-underline">Jobs</NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/resume" className="text-white hover:no-underline">Resume Optimizer</NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/about" className="text-white hover:no-underline">About Us</NavigationMenuLink>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
       <section className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden bg-black text-center p-8">
@@ -146,6 +116,8 @@ export default function Landing() {
     </div>
   </div>
 </section>
+
+<Footer/>
     </div>
   );
 }

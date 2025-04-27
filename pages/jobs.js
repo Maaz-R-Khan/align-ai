@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from "@/components/ui/navigation-menu";
 import { motion } from "framer-motion";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import Footer from '@/components/ui/footer';
+import Navbar from '@/components/ui/navbar';
 
 export default function Jobs() {
   const [resume, setResume] = useState('');
@@ -108,32 +112,26 @@ export default function Jobs() {
     }
   };
 
+const router = useRouter();
+const { tab } = router.query;
+
+// When tab changes in URL, update activeTab
+useEffect(() => {
+  if (tab === "resume") {
+    setActiveTab("resume");
+  } else if (tab === "matches") {
+    setActiveTab("matches");
+  } else {
+    setActiveTab("search"); // Default
+  }
+}, [tab]);
+
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-900">
       
       {/* Navbar */}
-      <nav className="relative z-10 w-full bg-black bg-opacity-70 p-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="text-white text-2xl font-bold">AlignAI</div>
-
-          <NavigationMenu>
-            <NavigationMenuList className="flex space-x-6">
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/" className="text-white hover:underline">Home</NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/jobs" className="text-white hover:underline">Jobs</NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/resume" className="text-white hover:underline">Resume Optimizer</NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/about" className="text-white hover:underline">About Us</NavigationMenuLink>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Main Content */}
       <div className="relative z-10 flex-grow max-w-7xl mx-auto py-8 px-4">
@@ -229,6 +227,24 @@ export default function Jobs() {
                       </div>
                     </div>
                   </div>
+
+                  <div className="mb-4">
+                    <h4 className="font-medium mb-2 text-gray-300">Work Arrangement</h4>
+                    <div className="space-y-2 text-gray-400">
+                      <div className="flex items-center">
+                        <input type="checkbox" id="On-site" className="mr-2" />
+                        <label htmlFor="On-site">On-site</label>
+                      </div>
+                      <div className="flex items-center">
+                        <input type="checkbox" id="Hybrid" className="mr-2" />
+                        <label htmlFor="Hybrid">Hybrid</label>
+                      </div>
+                      <div className="flex items-center">
+                        <input type="checkbox" id="Remote" className="mr-2" />
+                        <label htmlFor="Remote">Remote</label>
+                      </div>
+                    </div>
+                  </div>
                   
                   <div className="mb-4">
                     <h4 className="font-medium mb-2 text-gray-300">Experience Level</h4>
@@ -246,15 +262,6 @@ export default function Jobs() {
                         <label htmlFor="senior-level">Senior Level</label>
                       </div>
                     </div>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-medium mb-2 text-gray-300">Location</h4>
-                    <input 
-                      type="text" 
-                      placeholder="Enter location..." 
-                      className="w-full bg-gray-800 text-white border border-gray-700 rounded px-3 py-2"
-                    />
                   </div>
                 </div>
                 
@@ -338,8 +345,8 @@ export default function Jobs() {
 
           {/* Resume Optimizer Tab */}
           {activeTab === 'resume' && (
-            <div>
-              <h2 className="text-2xl font-bold mb-6 text-white">Resume Optimizer</h2>
+            <div id="resume-optimizer">
+              <h2 id="resumeOptimizer" className="text-2xl font-bold mb-6 text-white">Resume Optimizer</h2>
               <div className="bg-gray-900 p-6 rounded">
                 <p className="mb-4 text-gray-300">Paste your resume below to get AI-powered optimization suggestions</p>
                 
@@ -435,6 +442,7 @@ export default function Jobs() {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
