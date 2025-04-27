@@ -78,7 +78,7 @@ export default function About_us() {
           name="Maaz Khan"
           role="Software Engineer"
           bio="Passionate about AI & Web Development"
-          img="/Maaz.jpg"
+          img="/Maaz.JPG"
         />
         <TeamMemberCard
           name="Gagan Sapkota"
