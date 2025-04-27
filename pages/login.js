@@ -54,11 +54,11 @@ export default function Login() {
 
           {/* 👇 Add this section */}
           <p className="text-gray-400 mt-4 text-center">
-            Don't have an account?{" "}
-            <a href="/signup" className="text-blue-500 hover:underline">
-              Sign Up
-            </a>
-          </p>
+  Don&apos;t have an account?{" "}
+  <a href="/signup" className="text-blue-500 hover:underline">
+    Sign Up
+  </a>
+</p>
         </form>
       </div>
 
