@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import Footer from '@/components/ui/footer';
 import Navbar from '@/components/ui/navbar';
+import { marked } from 'marked';
 
 export default function Jobs() {
   const [resume, setResume] = useState('');
@@ -23,6 +24,27 @@ export default function Jobs() {
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 10;
   const fileInputRef = useRef(null);
+
+  // Function to convert markdown to HTML
+  function convertMarkdownToHtml(markdown) {
+    if (!markdown) return '';
+    
+    try {
+      // Configure marked options
+      marked.setOptions({
+        breaks: true, 
+        gfm: true,
+        sanitize: true 
+      });
+      
+      // Convert markdown to HTML
+      const htmlContent = marked.parse(markdown);
+      return htmlContent;
+    } catch (error) {
+      console.error("Error converting markdown to HTML:", error);
+      return markdown; // Return original text if conversion fails
+    }
+  }
 
   async function fetchJobs() {
     setIsLoading(prev => ({ ...prev, jobs: true }));
@@ -459,9 +481,11 @@ export default function Jobs() {
                   <div className="mt-8">
                     <h3 className="text-xl font-semibold mb-4 text-white">Optimization Tips:</h3>
                     <div className="bg-gray-800 border border-gray-700 p-6 rounded">
-                      <div className="whitespace-pre-line text-gray-300">
-                        {optimizationSuggestions}
-                      </div>
+                      {/* Use dangerouslySetInnerHTML to render the converted HTML */}
+                      <div 
+                        className="text-gray-300"
+                        dangerouslySetInnerHTML={{ __html: convertMarkdownToHtml(optimizationSuggestions) }}
+                      ></div>
                     </div>
                   </div>
                 )}
@@ -504,11 +528,17 @@ export default function Jobs() {
                         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                           <div>
                             <h4 className="font-medium text-green-400 mb-2">Strengths:</h4>
-                            <p className="bg-gray-800 border border-green-900 p-4 rounded text-gray-300">{match.strengths || "None specified"}</p>
+                            <div 
+                              className="bg-gray-800 border border-green-900 p-4 rounded text-gray-300"
+                              dangerouslySetInnerHTML={{ __html: convertMarkdownToHtml(match.strengths || "None specified") }}
+                            ></div>
                           </div>
                           <div>
                             <h4 className="font-medium text-red-400 mb-2">Areas to improve:</h4>
-                            <p className="bg-gray-800 border border-red-900 p-4 rounded text-gray-300">{match.weaknesses || "None specified"}</p>
+                            <div 
+                              className="bg-gray-800 border border-red-900 p-4 rounded text-gray-300"
+                              dangerouslySetInnerHTML={{ __html: convertMarkdownToHtml(match.weaknesses || "None specified") }}
+                            ></div>
                           </div>
                         </div>
                         
