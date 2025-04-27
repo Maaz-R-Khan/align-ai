@@ -33,7 +33,7 @@
 - **Frontend**: Next.js, React, Tailwind CSS, Framer Motion
 - **Backend/API**: Next.js API Routes, Adzuna API
 - **Authentication**: Firebase Auth
-- **Email Integration**: Formspree (or alternative)
+- **Email Integration**: Web3Forms
 - **Deployment**: Vercel
 - **Version Control**: Git & GitHub
 
