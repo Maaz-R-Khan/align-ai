@@ -92,14 +92,14 @@ export default function About_us() {
           name="Simon Ramirez"
           role="Software Engineer"
           bio="Passionate about AI & Web Development"
-          img="https://heroui.com/images/album-cover.png"
+          img="/Simon.jpeg"
         />
 
         <TeamMemberCard 
           name="Oscar Gurrero"
           role="Product Designer"
           bio="Creating seamless user experiences"
-          img="https://heroui.com/images/album-cover.png"
+          img="/Oscar.jpeg"
         />
       </div>
       <div className="flex flex-wrap justify-center gap-10 mt-10 ">
@@ -107,23 +107,19 @@ export default function About_us() {
           name="Maaz Khan"
           role="Software Engineer"
           bio="Passionate about AI & Web Development"
-          img="https://heroui.com/images/album-cover.png"
+          img="/Maaz.jpg"
         />
 
         <TeamMemberCard 
           name="Gagan Sapkota"
           role="Product Designer"
           bio="Creating seamless user experiences"
-          img= "https://heroui.com/images/album-cover.png"
+          img= "/Gagan.jpeg"
         />
       </div>
 
-      <div className="min-h-screen flex flex-col bg-black text-white p-8 max-h-15">
-    {/* Your page content */}
-
+      
     <Footer />
-    </div>
-
     </div>
 
 

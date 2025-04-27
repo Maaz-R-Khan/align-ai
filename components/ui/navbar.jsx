@@ -39,7 +39,7 @@ export default function Navbar() {
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink href="/about" className="text-white hover:no-underline">
+              <NavigationMenuLink href="/aboutus" className="text-white hover:no-underline">
                 About Us
               </NavigationMenuLink>
             </NavigationMenuItem>

@@ -1,15 +1,15 @@
 import React from "react";
-import { Card, CardBody, Image } from "@heroui/react";
+import { Card, CardBody } from "@heroui/card";
+import { Image } from "@heroui/image";
 
 export default function TeamMemberCard({ name, role, bio, img }) {
   return (
-    
     <Card
-    isBlurred
-    className="w-11/12 sm:w-3/4 md:w-2/5 lg:w-1/4 min-w-[260px] 
-                border border-gray-700 bg-white/10 backdrop-blur-md rounded-lg shadow-lg transition-all duration-300"
+      isBlurred
+      className="w-11/12 sm:w-3/4 md:w-2/5 lg:w-1/4 min-w-[260px] 
+                 border border-gray-700 bg-white/10 backdrop-blur-md rounded-lg shadow-lg transition-all duration-300"
     >
-        <CardBody>
+      <CardBody>
         <div className="grid grid-cols-6 md:grid-cols-12 gap-6 md:gap-4 items-center justify-center">
           <div className="relative col-span-6 md:col-span-4">
             <Image
