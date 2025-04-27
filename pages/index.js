@@ -23,7 +23,7 @@ export default function Landing() {
                 <NavigationMenuLink href="/resume" className="text-white hover:underline">Resume Optimizer</NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <NavigationMenuLink href="/about" className="text-white hover:underline">About Us</NavigationMenuLink>
+                <NavigationMenuLink href="/About_us" className="text-white hover:underline">About Us</NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
