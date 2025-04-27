@@ -57,7 +57,10 @@ export default function About_us() {
         <div className="container mx-auto px-6">
                 <h1 className="text-5xl font-bold mb-6">Our Mission</h1>
                 <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                At AlignAI, we're transforming the job search experience by connecting the right people with the right opportunities through AI-powered resume optimization and intelligent job matching.
+                AlignAI was born from our own struggles navigating the job market.
+We know how overwhelming it can feel — applying, getting rejected, not knowing how to improve.
+So we decided to create the solution we wished we had: an AI-powered job matcher and resume optimizer built to empower students to present their best selves, discover the right opportunities, and connect with employers who value their potential.
+We're here to make the job search less stressful — and more successful.
                 </p>
               </div>
       </motion.section>
