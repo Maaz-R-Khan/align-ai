@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@heroui/react": "^2.7.6",
     "@heroui/card": "^2.2.16",
     "@heroui/divider": "^2.2.11",
     "@heroui/image": "^2.2.10",
